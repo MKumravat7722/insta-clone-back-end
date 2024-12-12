@@ -1,41 +1,44 @@
 class LikesController < ApplicationController
-  before_action :set_post ,only:[:create,:destroy,:show]  
+  before_action :authenticate_user!
+  before_action :set_post, only: %i[create destroy show]
+
   def index
-    @likes=Like.all
+    @likes = Like.all
     render json: @likes
   end
-  def show 
+
+  def show
     if @post
-      render json @post.likes
+      render json: @post.likes
     else
-      render json: {message:"invalid input"}
+      render json: { message: 'Invalid input' }, status: :unprocessable_entity
     end
-  end   
+  end
+
   def create
-    @likes=@post.likes.new(like_params)
-    if @likes.save
-      render json: {message:"likes created succesfully"}
+    @like = @post.likes.new(user: @current_user)
+    if @like.save
+      render json: { message: 'Like created successfully' }, status: :created
     else
-      render json: {error: "like not created"}
+      render json: { error: 'Like not created' }, status: :unprocessable_entity
     end
-  end 
-  private def like_params 
-    params.require(:like).permit( 
-      :user_id,
-    )
   end
+
   def destroy
-    @like=@post.likes.find(params[:id])
-    if @like 
+    @like = @post.likes.find_by(user: @current_user)
+    if @like
       @like.destroy
-      render json: @like
-      # render json: {message: "Post Unlike  succesfull"}
+      render json: { message: 'Like removed successfully' }, status: :ok
     else
-      render json: {message: "likes not exists in this post"}
+      render json: { message: 'Like does not exist' }, status: :not_found
     end
-    # redirect_to post_path(@post)
   end
+
+  private
+
   def set_post
-    @post=Post.find(params[:post_id])
+    @post = Post.find(params[:post_id])
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: 'Post not found' }, status: :not_found
   end
 end
