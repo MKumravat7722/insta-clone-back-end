@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:create]
+  skip_before_action :authenticate_user, only: [:create]
 
   def index
     render json: @current_user
@@ -19,10 +19,9 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      UserMailer.with(user: @user).welcome_email.deliver_now
-      render json: @user, status: :created
+      render json: { message: 'User created successfully', user: @user }, status: :created
     else
-      render json: { error: @user.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -66,6 +65,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.permit(:first_name, :last_name, :username, :email, :password, :profile_picture)
+    params.require(:user).permit(:full_name, :username, :email, :password, :profile_picture)
   end
 end
