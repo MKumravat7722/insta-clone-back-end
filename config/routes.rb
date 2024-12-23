@@ -20,4 +20,6 @@ Rails.application.routes.draw do
   end
   get 'comments/:id', to: "comments#show"
   post 'users/login', to: 'authentication#login'
+
+  resources :passwords, only: [:create, :edit, :update], param: :token
   end

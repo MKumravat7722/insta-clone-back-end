@@ -26,4 +26,25 @@ class User < ApplicationRecord
     with: /\A[a-zA-Z\s]+\z/,
     message: 'can only contain letters and spaces'
   }
+
+  def generate_password_reset_token!
+    self.password_reset_token = SecureRandom.urlsafe_base64
+    self.password_reset_sent_at = Time.current
+    update_columns(
+      password_reset_token: password_reset_token,
+      password_reset_sent_at: password_reset_sent_at
+    )
+  end
+
+  def password_reset_token_valid?
+    password_reset_sent_at > 2.hours.ago
+  end
+
+  # Reset the user's password
+  def reset_password!(new_password)
+    self.password = new_password
+    self.password_reset_token = nil
+    self.password_reset_sent_at = nil
+    save!
+  end
 end

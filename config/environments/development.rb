@@ -1,4 +1,4 @@
-require "active_support/core_ext/integer/time"
+require 'active_support/core_ext/integer/time'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -19,41 +19,36 @@ Rails.application.configure do
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.
-  if Rails.root.join("tmp/caching-dev.txt").exist?
+  if Rails.root.join('tmp/caching-dev.txt').exist?
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
 
     config.cache_store = :memory_store
     config.public_file_server.headers = {
-      "Cache-Control" => "public, max-age=#{2.days.to_i}"
+      'Cache-Control' => "public, max-age=#{2.days.to_i}"
     }
   else
     config.action_controller.perform_caching = false
 
     config.cache_store = :null_store
   end
-    config.assets.quiet = true
+  config.assets.quiet = true
 
-
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
   config.action_mailer.perform_deliveries = true
-  config.action_mailer.default_url_options = { 
-    :host => 'localhost:3000',
-    :protocol => 'http'
-  } 
+  config.action_mailer.default_url_options = {
+    host: 'localhost:3000',
+    protocol: 'http'
+  }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address => 'smtp.gmail.com',
-    :port => 587,
-    :user_name => 'mohitk@shriffle.com',
-    :password => '3945 7745		 3672 4178
-    4149 7318		 4658 5747
-    1265 4139		 6231 1379
-    1212 4289		 0726 1441
-    4959 3764		 1763 4067',
-    :authentication => 'plain',
-    :enable_starttls_auto => true
-}
+    address: 'smtp.gmail.com',
+    port: 587,
+    user_name: 'mohitk@shriffle.com',
+    password: 'cmuxniqvrjzjsbee',
+    authentication: 'plain',
+    enable_starttls_auto: true
+  }
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
@@ -82,7 +77,7 @@ Rails.application.configure do
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
-  
+
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
 
