@@ -10,6 +10,21 @@ class User < ApplicationRecord
   has_many :followees, through: :followed_users, source: :followee
   has_many :following_users, foreign_key: :followee_id, class_name: 'Follow', dependent: :destroy
   has_many :followers, through: :following_users, source: :follower
+  
+  PASSWORD_FORMAT = /\A
+  (?=.{8,})          # Must contain 8 or more characters
+  (?=.*\d)           # Must contain a digit
+  (?=.*[a-z])        # Must contain a lower case character
+  (?=.*[A-Z])        # Must contain an upper case character
+  (?=.*[[:^alnum:]]) # Must contain a symbol
+/x
+
+  validates :password, 
+    presence: true, 
+    length: { in: 8..128 }, 
+    format: { with: PASSWORD_FORMAT }, 
+    confirmation: true, 
+    on: :create 
 
   validates :email, presence: true, uniqueness: true, format: {
     with: URI::MailTo::EMAIL_REGEXP,
@@ -27,6 +42,9 @@ class User < ApplicationRecord
     message: 'can only contain letters and spaces'
   }
 
+  validates :password_reset_token, uniqueness: true, allow_nil: true
+  validates :password_reset_sent_at, presence: true, if: -> { password_reset_token.present? }
+
   def generate_password_reset_token!
     self.password_reset_token = SecureRandom.urlsafe_base64
     self.password_reset_sent_at = Time.current
@@ -36,15 +54,7 @@ class User < ApplicationRecord
     )
   end
 
-  def password_reset_token_valid?
-    password_reset_sent_at > 2.hours.ago
-  end
-
-  # Reset the user's password
-  def reset_password!(new_password)
-    self.password = new_password
-    self.password_reset_token = nil
-    self.password_reset_sent_at = nil
-    save!
+  def clear_password_reset_token!
+    update(password_reset_token: nil, password_reset_sent_at: nil)
   end
 end
