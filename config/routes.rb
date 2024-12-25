@@ -20,9 +20,5 @@ Rails.application.routes.draw do
   get 'comments/:id', to: 'comments#show'
   post 'users/login', to: 'authentication#login'
 
-  # resources :passwords, only: [:new, :create, :edit, :update]
-  get 'passwords/new', to: 'passwords#new', as: 'new_password'
-  post 'passwords', to: 'passwords#create', as: 'passwords'
-  get 'passwords/edit/:token', to: 'passwords#edit', as: 'edit_password'
-  post 'passwords/:token', to: 'passwords#update', as: 'password'
+  resources :passwords, only: %i[create update], param: :token
 end

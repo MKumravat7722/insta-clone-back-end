@@ -10,15 +10,8 @@ class PasswordsController < ApplicationController
       UserMailer.password_reset(user).deliver_now
       render json: { message: 'Password reset instructions have been sent to your email.' }, status: :ok
     else
-      render json: { error: 'Email not found' }, status: :not_found
+      render json: { errors: 'Email not found' }, status: :not_found
     end
-  end
-
-  def edit
-    @user = User.find_by(password_reset_token: params[:token])
-    return unless @user.nil?
-
-    render json: { error: 'Invalid token' }, status: :not_found
   end
 
   def update
