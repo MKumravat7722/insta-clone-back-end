@@ -1,23 +1,26 @@
 Rails.application.routes.draw do
   resources :users, only: %i[index show create update]
 
-  resources :posts, only: %i[show create]
+  resources :posts
   get 'posts/users/:id', to: 'posts#user_post_by_user'
-  # resources :likes, only:[:index,:create]
-  resources :posts do
-    resources :likes, only: %i[create destroy show]
+
+  resources :posts, only: [] do
+    resource :likes, only: %i[create destroy]
   end
-  post '/users/:id/follow', to: 'users#follow', as: 'follow_user'
-  post '/users/:id/unfollow', to: 'users#unfollow', as: 'unfollow_user'
+
   resources :notifications, only: [:index]
 
-  resources :users do
-    resources :posts, only: %i[create update show destroy]
+  resources :posts, only: [] do
+    resources :comments, only: %i[create destroy]
   end
-  resources :posts do
-    resources :comments, only: %i[index create]
+
+  resources :follows, only: [] do
+    member do
+      post :follow
+      delete :unfollow
+    end
   end
-  get 'comments/:id', to: 'comments#show'
+
   post 'users/login', to: 'authentication#login'
 
   resources :passwords, only: %i[create update], param: :token

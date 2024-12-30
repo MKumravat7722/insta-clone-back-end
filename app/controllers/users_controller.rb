@@ -39,30 +39,6 @@ class UsersController < ApplicationController
     render json: { message: 'User deleted successfully' }, status: :ok
   end
 
-  def follow
-    user = User.find(params[:id])
-    if current_user.followees << user
-      render json: user, status: :ok
-    else
-      render json: { error: 'Unable to follow user' }, status: :unprocessable_entity
-    end
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'User not found' }, status: :not_found
-  end
-
-  def unfollow
-    user = User.find(params[:id])
-    follow = current_user.followed_users.find_by(followee_id: user.id)
-    if follow
-      follow.destroy
-      render json: user, status: :ok
-    else
-      render json: { error: 'Unable to unfollow user' }, status: :unprocessable_entity
-    end
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'User not found' }, status: :not_found
-  end
-
   private
 
   def user_params

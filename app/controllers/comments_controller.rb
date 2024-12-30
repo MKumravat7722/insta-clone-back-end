@@ -1,25 +1,22 @@
 class CommentsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_post, only: %i[index create]
-
-  def index
-    @comments = @post.comments
-    render json: @comments
-  end
-
-  def show
-    @comment = Comment.find(params[:id])
-    render json: @comment
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Comment not found' }, status: :not_found
-  end
+  before_action :authenticate_user
+  before_action :set_post, only: %i[create destroy]
+  before_action :set_comment, only: [:destroy]
 
   def create
-    @comment = @post.comments.new(comment_params.merge(user: @current_user))
-    if @comment.save
-      render json: @comment, status: :created
+    comment = @post.comments.build(comment_params.merge(user: @current_user))
+    if comment.save
+      render json: comment, status: :created
     else
-      render json: { error: @comment.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: comment.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if @comment.destroy
+      render json: { message: 'Comment deleted successfully' }, status: :ok
+    else
+      render json: { errors: 'Failed to delete comment' }, status: :unprocessable_entity
     end
   end
 
@@ -30,8 +27,12 @@ class CommentsController < ApplicationController
   end
 
   def set_post
-    @post = Post.find(params[:post_id])
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Post not found' }, status: :not_found
+    @post = Post.find_by(id: params[:post_id])
+    render json: { error: 'Post not found' }, status: :not_found unless @post
+  end
+
+  def set_comment
+    @comment = @post.comments.find_by(id: params[:id])
+    render json: { error: 'Comment not found' }, status: :not_found unless @comment
   end
 end
