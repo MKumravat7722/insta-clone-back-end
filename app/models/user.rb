@@ -2,6 +2,7 @@ class User < ApplicationRecord
   has_secure_password
   has_one_attached :profile_picture
   has_many :posts, -> { order(created_at: :desc) }, dependent: :destroy
+  has_many :stories, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :notifications, dependent: :destroy
@@ -10,7 +11,7 @@ class User < ApplicationRecord
   has_many :followees, through: :followed_users, source: :followee
   has_many :following_users, foreign_key: :followee_id, class_name: 'Follow', dependent: :destroy
   has_many :followers, through: :following_users, source: :follower
-  
+
   PASSWORD_FORMAT = /\A
   (?=.{8,})          # Must contain 8 or more characters
   (?=.*\d)           # Must contain a digit
@@ -19,12 +20,12 @@ class User < ApplicationRecord
   (?=.*[[:^alnum:]]) # Must contain a symbol
 /x
 
-  validates :password, 
-    presence: true, 
-    length: { in: 8..128 }, 
-    format: { with: PASSWORD_FORMAT }, 
-    confirmation: true, 
-    on: :create 
+  validates :password,
+            presence: true,
+            length: { in: 8..128 },
+            format: { with: PASSWORD_FORMAT },
+            confirmation: true,
+            on: :create
 
   validates :email, presence: true, uniqueness: true, format: {
     with: URI::MailTo::EMAIL_REGEXP,

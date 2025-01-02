@@ -1,5 +1,5 @@
 class LikesController < ApplicationController
-  before_action :authenticate_user
+  before_action ::authenticate_user!
   before_action :set_post
 
   # POST /posts/:post_id/likes

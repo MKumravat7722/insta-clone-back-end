@@ -24,4 +24,5 @@ Rails.application.routes.draw do
   post 'users/login', to: 'authentication#login'
 
   resources :passwords, only: %i[create update], param: :token
+  resources :stories, only: %i[index create destroy]
 end
