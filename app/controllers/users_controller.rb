@@ -1,17 +1,24 @@
 class UsersController < ApplicationController
-  skip_before_action ::authenticate_user!, only: [:create]
+  skip_before_action :authenticate_user!, only: [:create]
 
   def index
     render json: @current_user
   end
 
-  def show
+  # def show
+  #   byebug
+  #   user = User.find(params[:id])
+  #   follower_ids = user.followers.pluck(:follower_id)
+  #   followee_ids = user.followees.pluck(:followee_id)
+  #   post_user_ids = (follower_ids + followee_ids + [user.id]).uniq
+  #   @posts = Post.where(user_id: post_user_ids)
+  #   render json: @posts
+  # rescue ActiveRecord::RecordNotFound
+  #   render json: { error: 'User not found' }, status: :not_found
+  # end
+  def show 
     user = User.find(params[:id])
-    follower_ids = user.followers.pluck(:follower_id)
-    followee_ids = user.followees.pluck(:followee_id)
-    post_user_ids = (follower_ids + followee_ids + [user.id]).uniq
-    @posts = Post.where(user_id: post_user_ids)
-    render json: @posts
+    render json: user
   rescue ActiveRecord::RecordNotFound
     render json: { error: 'User not found' }, status: :not_found
   end

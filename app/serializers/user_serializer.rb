@@ -3,8 +3,11 @@ class UserSerializer < ActiveModel::Serializer
   has_many :posts
   has_many :followers
   has_many :followees
+  has_many :stories
 
   def profile_picture_url
-    object.profile_picture.service_url if object.profile_picture.attached?
+    object.profile_picture.url if object.profile_picture.attached?
   end
 end
+
+    
