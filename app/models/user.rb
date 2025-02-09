@@ -6,7 +6,10 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :likes, dependent: :destroy
   has_many :notifications, dependent: :destroy
-
+  
+  has_many :search_histories, dependent: :destroy
+  has_many :searched_users, through: :search_histories, source: :searched_user
+  
   has_many :followed_users, foreign_key: :follower_id, class_name: 'Follow', dependent: :destroy
   has_many :followees, through: :followed_users, source: :followee
   has_many :following_users, foreign_key: :followee_id, class_name: 'Follow', dependent: :destroy

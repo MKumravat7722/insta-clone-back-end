@@ -10,6 +10,30 @@ class Post < ApplicationRecord
 
   after_create :create_post_notification
 
+  def liked_by?(user)
+    likes.exists?(user: user)
+  end
+
+  include AASM
+
+  aasm column: 'state' do
+    state :draft, initial: true
+    state :published
+    state :archived
+
+    event :publish do
+      transitions from: :draft, to: :published
+    end
+
+    event :archive do
+      transitions from: [:draft, :published], to: :archived
+    end
+
+    event :unarchive do
+      transitions from: :archived, to: :draft
+    end
+  end 
+
   private
 
   def create_post_notification

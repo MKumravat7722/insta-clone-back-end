@@ -1,21 +1,10 @@
 class UsersController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:create]
+  skip_before_action :authenticate_user!, only: [:create, :search]
 
   def index
     render json: @current_user
   end
 
-  # def show
-  #   byebug
-  #   user = User.find(params[:id])
-  #   follower_ids = user.followers.pluck(:follower_id)
-  #   followee_ids = user.followees.pluck(:followee_id)
-  #   post_user_ids = (follower_ids + followee_ids + [user.id]).uniq
-  #   @posts = Post.where(user_id: post_user_ids)
-  #   render json: @posts
-  # rescue ActiveRecord::RecordNotFound
-  #   render json: { error: 'User not found' }, status: :not_found
-  # end
   def show 
     user = User.find(params[:id])
     render json: user
@@ -26,7 +15,6 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      # UserMailer.with(user: @user).welcome_email.deliver_now
       render json: { message: 'User created successfully', user: @user }, status: :created
     else
       render json: { errors: @user.errors.full_messages }, status: :unprocessable_entity
@@ -46,9 +34,28 @@ class UsersController < ApplicationController
     render json: { message: 'User deleted successfully' }, status: :ok
   end
 
+  def search
+    if params[:query].present?
+      users = User.where('username LIKE ? OR email LIKE ?', "%#{params[:query]}%", "%#{params[:query]}%")
+      users.each { |user| save_search_history(user) }
+      render json: users, each_serializer: UserSerializer
+    else
+      render json: { error: 'Query parameter is missing' }, status: :bad_request
+    end
+  end
+
+  def search_history
+    search_histories = @current_user.search_histories.includes(:searched_user).order(created_at: :desc).limit(10)
+    render json: search_histories, each_serializer: SearchHistorySerializer
+  end
+
   private
 
   def user_params
     params.require(:user).permit(:full_name, :username, :email, :password, :profile_picture)
+  end
+
+  def save_search_history(searched_user)
+    @current_user.search_histories.create(searched_user: searched_user)
   end
 end

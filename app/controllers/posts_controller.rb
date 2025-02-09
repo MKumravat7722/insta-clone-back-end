@@ -1,6 +1,8 @@
 class PostsController < ApplicationController
+  
   def index
-    render json: @current_user.posts
+    @posts = Post.all.includes(:user, :likes, :comments)
+    render json: @posts, each_serializer: PostSerializer, scope: @current_user
   end
 
   def show

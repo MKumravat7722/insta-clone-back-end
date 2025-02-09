@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.2.2"
+ruby "3.1.3"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.6"
@@ -20,17 +20,21 @@ gem "importmap-rails"
 
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem "turbo-rails"
+gem 'active_model_serializers', '~> 0.10.0'
 
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
 gem "stimulus-rails"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
-gem "active_model_serializers"
 gem "image_processing", "~> 1.2"
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 gem 'jwt'
+gem 'rack-cors'
+gem 'aasm'
+
+gem 'rubocop'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]

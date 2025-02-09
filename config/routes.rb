@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  resources :users, only: %i[index show create update]
+  resources :users, only: %i[index show create update] do 
+    collection do
+      get 'search'
+      get 'search_history'
+    end
+  end
 
   resources :posts
   get 'posts/users/:id', to: 'posts#user_post_by_user'
