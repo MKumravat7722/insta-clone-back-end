@@ -9,7 +9,7 @@ class AuthenticationController < ApplicationController
       24.hours.to_i
       render json: {
         token: token,
-        user: @user
+        user: UserSerializer.new(@user)
       }, status: :ok
     else
       render json: { error: 'Unauthorized' }, status: :unauthorized

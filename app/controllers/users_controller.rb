@@ -22,6 +22,7 @@ class UsersController < ApplicationController
   end
 
   def update
+    byebug
     if @current_user.update(user_params)
       render json: @current_user, status: :ok
     else
@@ -52,10 +53,14 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:full_name, :username, :email, :password, :profile_picture)
+    params.require(:user).permit(:full_name, :username, :email, :bio, :password, :profile_picture)
   end
 
   def save_search_history(searched_user)
-    @current_user.search_histories.create(searched_user: searched_user)
+    if @current_user
+      @current_user.search_histories.create(searched_user: searched_user)
+    else
+      Rails.logger.error "Attempted to save search history without a current user"
+    end
   end
 end
