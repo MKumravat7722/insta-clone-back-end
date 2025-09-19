@@ -45,7 +45,7 @@ class User < ApplicationRecord
     with: /\A[a-zA-Z\s]+\z/,
     message: 'can only contain letters and spaces'
   }
-  validates :profile_picture, presence: true
+  # validates :profile_picture, presence: true
   validates :bio, length: { maximum: 500 }, allow_nil: true
 
   validates :password_reset_token, uniqueness: true, allow_nil: true
