@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/MKumravat7722/insta-clone-back-end'
+                git branch: 'master', url: 'https://github.com/MKumravat7722/insta-clone-back-end'
             }
         }
 
