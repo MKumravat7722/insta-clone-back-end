@@ -11,6 +11,9 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2025_02_09_182123) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -41,8 +44,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_09_182123) do
 
   create_table "comments", force: :cascade do |t|
     t.text "content"
-    t.integer "user_id", null: false
-    t.integer "post_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "post_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "parent_comment_id"
@@ -59,8 +62,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_09_182123) do
   end
 
   create_table "likes", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "post_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "post_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_likes_on_post_id"
@@ -68,7 +71,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_09_182123) do
   end
 
   create_table "notifications", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.integer "notifiable_id"
     t.string "notifiable_type"
     t.string "message"
@@ -80,7 +83,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_09_182123) do
 
   create_table "posts", force: :cascade do |t|
     t.text "caption"
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "state"
@@ -88,16 +91,14 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_09_182123) do
   end
 
   create_table "search_histories", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "searched_user_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["searched_user_id"], name: "index_search_histories_on_searched_user_id"
     t.index ["user_id"], name: "index_search_histories_on_user_id"
   end
 
   create_table "stories", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "image_url"
     t.datetime "expires_at"
     t.datetime "created_at", null: false
@@ -125,7 +126,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_02_09_182123) do
   add_foreign_key "likes", "users"
   add_foreign_key "notifications", "users"
   add_foreign_key "posts", "users"
-  add_foreign_key "search_histories", "searched_users"
   add_foreign_key "search_histories", "users"
   add_foreign_key "stories", "users"
 end
