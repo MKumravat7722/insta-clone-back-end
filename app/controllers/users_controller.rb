@@ -22,7 +22,6 @@ class UsersController < ApplicationController
   end
 
   def update
-    byebug
     if @current_user.update(user_params)
       render json: @current_user, status: :ok
     else
