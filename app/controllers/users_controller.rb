@@ -43,7 +43,12 @@ class UsersController < ApplicationController
       render json: { error: 'Query parameter is missing' }, status: :bad_request
     end
   end
+ 
+  def top_liked
 
+  end 
+
+  
   def search_history
     search_histories = @current_user.search_histories.includes(:searched_user).order(created_at: :desc).limit(10)
     render json: search_histories, each_serializer: SearchHistorySerializer

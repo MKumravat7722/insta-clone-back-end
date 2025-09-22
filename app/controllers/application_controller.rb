@@ -1,26 +1,30 @@
 class ApplicationController < ActionController::API
   include JwtToken
+
   before_action :authenticate_user!
   before_action do
-    ActiveStorage::Current.host = request.base_url
+    ActiveStorage::Current.url_options = { host: request.base_url }
   end
 
   private
 
+  # Authenticate user using JWT
   def authenticate_user!
-    header = request.headers['Authorization']
-    header = header.split(' ').last if header
-    begin
+    header = request.headers['Authorization']&.split(' ')&.last
+    if header.present?
       decoded = jwt_decode(header)
       @current_user = User.find(decoded[:user_id])
-    rescue ActiveRecord::RecordNotFound => e
-      render json: { error: e.message }, status: :unauthorized
-    rescue JWT::DecodeError => e
-      render json: { error: e.message }, status: :unauthorized
+    else
+      render json: { error: 'Nil JSON web token' }, status: :unauthorized
     end
+  rescue ActiveRecord::RecordNotFound => e
+    render json: { error: e.message }, status: :unauthorized
+  rescue JWT::DecodeError => e
+    render json: { error: e.message }, status: :unauthorized
   end
-  rescue_from ActiveRecord::RecordNotFound, with: :handle_exception
-  def handle_exception
-    render json: { error: 'ID not found' }
+
+  # Handle record not found globally
+  rescue_from ActiveRecord::RecordNotFound do |exception|
+    render json: { error: "#{exception.model || 'Record'} not found" }, status: :not_found
   end
 end
