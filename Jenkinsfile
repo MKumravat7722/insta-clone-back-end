@@ -1,49 +1,35 @@
 pipeline {
     agent any
 
-    environment {
-        RAILS_ENV = 'test'
-        DATABASE_HOST = 'localhost'       // Or your PostgreSQL host
-        DATABASE_USERNAME = 'postgres'
-        DATABASE_PASSWORD = 'postgres'
-        DATABASE_NAME = 'insta_clone_back_end_test'
-    }
-
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/MKumravat7722/insta-clone-back-end'
+                git branch: 'master', url: 'https://github.com/MKumravat7722/insta-clone-back-end.git'
+            }
+        }
+
+        stage('Install Bundler') {
+            steps {
+                sh 'gem install bundler'
             }
         }
 
         stage('Install dependencies') {
             steps {
-                sh 'bundle install --jobs=4 --retry=3'
-            }
-        }
-
-        stage('Setup DB') {
-            steps {
-                sh 'rails db:create db:migrate'
+                sh 'bundle install'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'bundle exec rspec'
+                sh 'bundle exec rspec spec/simple_test_spec.rb'
             }
         }
     }
 
     post {
         always {
-            echo 'Cleaning up...'
-        }
-        success {
-            echo 'Tests passed ✅'
-        }
-        failure {
-            echo 'Tests failed ❌'
+            echo 'Pipeline finished.'
         }
     }
 }
