@@ -8,9 +8,11 @@ pipeline {
             }
         }
 
-        stage('Install Bundler') {
+        stage('Check Ruby & Bundler') {
             steps {
-                sh 'gem install bundler'
+                sh 'ruby -v'
+                sh 'gem -v'
+                sh 'bundler -v'
             }
         }
 
