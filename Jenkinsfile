@@ -18,7 +18,16 @@ pipeline {
 
         stage('Install dependencies') {
             steps {
-                sh 'bundle install --path vendor/bundle'
+                sh '''
+                    bundle config set path 'vendor/bundle'
+                    bundle install
+                '''
+            }
+        }
+
+        stage('Run Rubocop') {
+            steps {
+                sh 'bundle exec rubocop app/controllers app/models spec/'
             }
         }
 

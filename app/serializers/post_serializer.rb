@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PostSerializer < ActiveModel::Serializer
   attributes :id, :caption, :photos, :created_at, :updated_at, :isLiked, :likes_count, :comments_count
   belongs_to :user
@@ -5,7 +7,7 @@ class PostSerializer < ActiveModel::Serializer
   has_many :comments, serializer: CommentSerializer
 
   def photos
-    object.photos.attached? ? object.photos.map { |photo| photo.url } : []
+    object.photos.attached? ? object.photos.map(&:url) : []
   end
 
   def isLiked

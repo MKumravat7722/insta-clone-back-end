@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SearchHistory < ApplicationRecord
   belongs_to :user
   belongs_to :searched_user, class_name: 'User'

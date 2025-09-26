@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StoriesController < ApplicationController
   before_action :authenticate_user!
 
@@ -5,10 +7,9 @@ class StoriesController < ApplicationController
     # users = User.joins(:stories).where('stories.expires_at > ?', Time.current).distinct
     users = User.joins(:stories).distinct
     serialized_users = ActiveModelSerializers::SerializableResource.new(users, each_serializer: UserSerializer).as_json
-    render json: {stories: serialized_users}
+    render json: { stories: serialized_users }
   end
-  
-  
+
   def create
     @story = @current_user.stories.build(story_params)
     @story.expires_at = 24.hours.from_now

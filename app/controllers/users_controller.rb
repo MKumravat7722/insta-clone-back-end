@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:create, :search]
+  skip_before_action :authenticate_user!, only: %i[create search]
 
   def index
     render json: @current_user
   end
 
-  def show 
+  def show
     user = User.find(params[:id])
     render json: user
   rescue ActiveRecord::RecordNotFound
@@ -43,12 +45,9 @@ class UsersController < ApplicationController
       render json: { error: 'Query parameter is missing' }, status: :bad_request
     end
   end
- 
-  def top_liked
 
-  end 
+  def top_liked; end
 
-  
   def search_history
     search_histories = @current_user.search_histories.includes(:searched_user).order(created_at: :desc).limit(10)
     render json: search_histories, each_serializer: SearchHistorySerializer
@@ -64,7 +63,7 @@ class UsersController < ApplicationController
     if @current_user
       @current_user.search_histories.create(searched_user: searched_user)
     else
-      Rails.logger.error "Attempted to save search history without a current user"
+      Rails.logger.error 'Attempted to save search history without a current user'
     end
   end
 end

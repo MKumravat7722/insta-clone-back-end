@@ -1,8 +1,8 @@
 # spec/factories/posts.rb
 FactoryBot.define do
   factory :post do
-    association :user  # automatically creates a user if none is provided
-    caption { "Sample caption" }
+    association :user # automatically creates a user if none is provided
+    caption { 'Sample caption' }
 
     after(:build) do |post|
       # attach a fixture image for ActiveStorage

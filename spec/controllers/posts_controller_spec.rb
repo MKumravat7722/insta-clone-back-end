@@ -45,9 +45,9 @@ RSpec.describe PostsController, type: :controller do
 
   describe 'POST #create' do
     it 'creates a new post with valid params' do
-      expect {
+      expect do
         post :create, params: valid_params
-      }.to change(Post, :count).by(1)
+      end.to change(Post, :count).by(1)
       expect(response).to have_http_status(:ok)
       json = JSON.parse(response.body)
       expect(json['caption']).to eq('caption')
@@ -75,7 +75,7 @@ RSpec.describe PostsController, type: :controller do
       post_other = create(:post, user: other_user)
       patch :update, params: { id: post_other.id, posts: { caption: 'New' } }
       json = JSON.parse(response.body)
-      expect(json['error']).to eq("Post not found")
+      expect(json['error']).to eq('Post not found')
     end
   end
 
@@ -83,9 +83,9 @@ RSpec.describe PostsController, type: :controller do
     let!(:post1) { create(:post, user: user) }
 
     it 'deletes own post' do
-      expect {
+      expect do
         delete :destroy, params: { id: post1.id }
-      }.to change(Post, :count).by(-1)
+      end.to change(Post, :count).by(-1)
       expect(response).to have_http_status(:ok)
       json = JSON.parse(response.body)
       expect(json['message']).to eq('Post Deleted Succesfull')
@@ -96,7 +96,7 @@ RSpec.describe PostsController, type: :controller do
       delete :destroy, params: { id: post_other.id }
       expect(response).to have_http_status(404)
       json = JSON.parse(response.body)
-      expect(json['error']).to eq("Post not found")
+      expect(json['error']).to eq('Post not found')
     end
   end
 end

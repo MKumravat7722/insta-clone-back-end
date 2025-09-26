@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class NotificationsController < ApplicationController
   def index
-    notifications =@current_user.notifications
+    notifications = @current_user.notifications
     render json: notifications
   end
 end

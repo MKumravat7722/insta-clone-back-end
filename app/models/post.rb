@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Post < ApplicationRecord
   belongs_to :user
   has_many :comments, -> { order(created_at: :desc) }, dependent: :destroy
@@ -26,13 +28,13 @@ class Post < ApplicationRecord
     end
 
     event :archive do
-      transitions from: [:draft, :published], to: :archived
+      transitions from: %i[draft published], to: :archived
     end
 
     event :unarchive do
       transitions from: :archived, to: :draft
     end
-  end 
+  end
 
   private
 
