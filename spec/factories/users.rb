@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :user do
-    full_name { Faker::Name.first_name + " " + Faker::Name.last_name } # ensures only letters & spaces
+    full_name { "New full name"} # ensures only letters & spaces
     username { Faker::Internet.unique.username(specifier: 5..8) }
     email { Faker::Internet.unique.email }
     password { 'Password@123' }

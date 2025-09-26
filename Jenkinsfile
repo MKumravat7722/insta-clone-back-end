@@ -18,15 +18,16 @@ pipeline {
 
         stage('Install dependencies') {
             steps {
-                sh 'bundle install'
+                sh 'bundle install --path vendor/bundle'
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'bundle exec rspec spec/simple_test_spec.rb'
+                sh 'bundle exec rspec spec/'
             }
         }
+
     }
 
     post {
