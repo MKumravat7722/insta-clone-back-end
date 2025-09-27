@@ -2,6 +2,7 @@
 
 class PostsController < ApplicationController
   include ActiveStorage::SetCurrent
+
   before_action :set_post, only: %i[show update destroy]
 
   def index

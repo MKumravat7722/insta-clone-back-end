@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :user do
     full_name { 'New full name' } # ensures only letters & spaces

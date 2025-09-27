@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 # spec/controllers/posts_controller_spec.rb
 require 'rails_helper'
 
 RSpec.describe PostsController, type: :controller do
   let!(:user) { create(:user) }
   let!(:other_user) { create(:user) }
-  let(:bearer_token) { jwt_token_1(user) }
+  let(:bearer_token) { jwt_token(user) }
   let(:image_file) { fixture_file_upload(Rails.root.join('spec/fixtures/files/test_image.png'), 'image/png') }
 
   before do
