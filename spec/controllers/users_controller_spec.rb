@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
   let!(:user) { create(:user) }
-  let(:bearer_token) { jwt_token_1(user) }
+  let(:bearer_token) { jwt_token(user) }
 
   before do
     request.headers['Authorization'] = "Bearer #{bearer_token}"

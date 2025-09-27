@@ -1,0 +1,13 @@
+# This should be in /home/mohit/projects/insta-clone-back-end/.rubocop.yml
+AllCops:
+  NewCops: enable
+
+# Disable documentation requirement
+Style/Documentation:
+  Enabled: false
+
+# Increase method length limit
+Metrics/BlockLength:
+  Max: 100
+  Exclude:
+    - 'spec/**/*'
