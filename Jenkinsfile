@@ -35,18 +35,6 @@ pipeline {
             steps {
                 sh 'bundle exec rspec spec/'
             }
-            post {
-                always {
-                    archiveArtifacts artifacts: 'coverage/**/*', allowEmptyArchive: true
-
-                    publishHTML(target: [
-                        reportName: 'Code Coverage',
-                        reportDir: 'coverage',
-                        reportFiles: 'index.html',
-                        keepAll: true
-                    ])
-                }
-            }
         }
     }
 
