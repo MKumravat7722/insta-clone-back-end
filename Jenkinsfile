@@ -42,8 +42,8 @@ pipeline {
                         alwaysLinkToLastBuild: true,
                         keepAll: true,
                         reportDir: 'coverage',
-                        reportFiles: 'rspec.html',
-                        reportName: 'RSpec Test Report'
+                        reportFiles: 'index.html',
+                        reportName: 'Test Coverage Report'
                     ])
                 }
             }
