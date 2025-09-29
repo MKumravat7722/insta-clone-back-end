@@ -35,6 +35,18 @@ pipeline {
             steps {
                 sh 'bundle exec rspec spec/'
             }
+            post {
+                always {
+                    publishHTML([
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: true,
+                        keepAll: true,
+                        reportDir: 'coverage',
+                        reportFiles: 'rspec.html',
+                        reportName: 'RSpec Test Report'
+                    ])
+                }
+            }
         }
     }
 
