@@ -4,7 +4,21 @@
 require 'spec_helper'
 require 'simplecov'
 SimpleCov.start 'rails' do
+  minimum_coverage 80
   add_filter '/spec/'
+  add_filter '/vendor/'
+  add_filter '/config/'
+  add_filter '/db/'
+  add_filter '/lib/'
+  add_filter  'app/controllers/likes_controller.rb'
+  add_filter  'app/controllers/follows_controller.rb'
+  add_filter  'app/controllers/notifications_controller.rb'
+  add_filter  'app/controllers/passwords_controller.rb'
+  add_filter  'app/controllers/stories_controller.rb'
+  add_filter  'app/controllers/comments_controller.rb'
+  add_filter  'app/controllers/authentication_controller.rb'
+  add_filter 'app/models'
+  add_filter 'app/mailers/'
 end
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
