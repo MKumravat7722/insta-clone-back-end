@@ -54,9 +54,9 @@ users.each do |user|
     end
 
     # Add likes
-    3.times do
-      post.likes.create!(user: users.sample)
-    end
+    # 3.times do
+    #   post.likes.create!(user: users.sample)
+    # end
   end
 end
 
